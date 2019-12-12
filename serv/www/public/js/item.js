@@ -1,9 +1,9 @@
 class Item {
-  constructor(title) {
+  constructor(title, classNames = 'prod-item') {
     this.elem = document.createElement('li');
 
     this.elem.textContent = title;
-    this.elem.className = 'prod-item';
+    this.elem.className = classNames;
 
     this.elem.addEventListener('click', this.selected.bind(this));
   }

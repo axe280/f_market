@@ -1,11 +1,18 @@
 class Field {
-  constructor (elem) {
+  constructor ({elem, listParent, listElems}) {
     this.elem = elem;
-    this.list = new List(document.querySelector('.prod-list'));
+    this.listParent = listParent;
+    this.listElems = listElems;
     this.titleInList = false;
 
     this.elem.addEventListener('input', this.inputListener.bind(this));
     this.elem.addEventListener('keydown', this.keydownListener.bind(this));
+    this.elem.addEventListener('focus', this.focusListener.bind(this));
+  }
+
+  focusListener(event) {
+    this.elem.value = '';
+    this.update();
   }
 
   inputListener(event) {
@@ -17,7 +24,7 @@ class Field {
       return;
     }
 
-    this.list.elem.querySelectorAll('li').forEach(item => {
+    this.listElems.forEach(item => {
       if (item.innerText.search(str) == -1) {
         item.classList.add('hidden');
       } else {
@@ -40,7 +47,7 @@ class Field {
     const title = this.elem.value.toLowerCase();
 
     // check in list
-    this.titleInList = Array.from(this.list.elem.querySelectorAll('li')).find(item => {
+    this.titleInList = Array.from(this.listElems).find(item => {
       return item.textContent === title;
     });
 
@@ -55,14 +62,15 @@ class Field {
     this.update();
   }
 
-  createItem(title) {
-    const item = new Item(title);
+  createItem(title, classNames) {
+    const item = new Item(title, classNames);
     
-    this.list.elem.prepend(item.elem);
+    this.listParent.prepend(item.elem);
   }
 
   update() {
-    this.list.elem.querySelectorAll('li').forEach(item => {
+    this.listElems = this.listParent.querySelectorAll('li');
+    this.listElems.forEach(item => {
       item.classList.remove('hidden');
       item.innerHTML = item.innerText;
     });
