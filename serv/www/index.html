@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Family market app</title>
@@ -8,17 +8,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
   <meta name="format-detection" content="telephone=no">
-  <link rel="stylesheet" href="css/main.css">
 
-  <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
   <main class="container">
 
     <div class="app">
+      <div class="logo">
+        <a href="/"><img src="img/logo/logo_transparent.png" alt=""></a>
+      </div>
       <div class="app-field">
         <input type="text" class="js-field" placeholder="Find product or input new item">
+        <button type="button" class="add-button color_base">Add</button>
       </div>
 
       <ul class="prod-list">
@@ -28,7 +35,8 @@
 
     <div class="bottom-fix">
       <div class="container">
-        <button type="button" class="send-button">Save changes</button>
+        <button class="remove-link" type="button">Edit grocery list</button>
+        <button type="button" class="send-button color_base">Update list</button>
       </div>
     </div>
 
@@ -36,9 +44,7 @@
 
 
   <script src="js/helpers.js"></script>
-  <script src="js/item.js"></script>
-  <script src="js/field.js"></script>
-  <script src="js/js.js"></script>
+  <script src="js/js.js" type="module"></script>
 </body>
 
 </html>

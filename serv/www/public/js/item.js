@@ -1,7 +1,6 @@
-class Item {
+export default class Item {
   constructor(title, classNames = 'prod-item') {
     this.elem = document.createElement('li');
-
     this.elem.textContent = title;
     this.elem.className = classNames;
 
@@ -25,6 +24,6 @@ class Item {
   moveDown() {
     setTimeout(() => {
       this.elem.parentElement.append(this.elem);
-    }, 200);
+    }, 300);
   }
 }

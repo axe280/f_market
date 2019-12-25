@@ -1,25 +1,31 @@
-class Field {
-  constructor ({elem, listParent, listElems}) {
-    this.elem = elem;
-    this.listParent = listParent;
-    this.listElems = listElems;
+import Item from './item.js';
+
+export default class Field {
+  constructor() {
+    this.elem = document.querySelector('.js-field');
+    this.listParent = document.querySelector('.prod-list');
+    this.listElems = document.querySelectorAll('.prod-list li');
+    this.addButton = document.querySelector('.add-button');
+
     this.titleInList = false;
 
     this.elem.addEventListener('input', this.inputListener.bind(this));
     this.elem.addEventListener('keydown', this.keydownListener.bind(this));
     this.elem.addEventListener('focus', this.focusListener.bind(this));
+
+    this.addButton.addEventListener('click', this.clickAddButton.bind(this));
   }
 
   focusListener(event) {
     this.elem.value = '';
-    this.update();
+    this.updateList();
   }
 
   inputListener(event) {
     let str = this.elem.value.toLowerCase();
 
     if (!str) {
-      this.update();
+      this.updateList();
 
       return;
     }
@@ -35,11 +41,19 @@ class Field {
     });
   }
 
+  clickAddButton(event) {
+    this.pushToList();
+  }
+
   keydownListener(event) {
     if (event.code !== 'Enter') {
       return;
     }
 
+    this.pushToList();
+  }
+
+  pushToList() {
     if (!this.elem.value) {
       return;
     }
@@ -56,23 +70,21 @@ class Field {
     }
 
     // create new item
-    this.createItem(title);
-    this.elem.value = '';
-
-    this.update();
-  }
-
-  createItem(title, classNames) {
-    const item = new Item(title, classNames);
-    
+    const item = new Item(title);
     this.listParent.prepend(item.elem);
+
+    this.elem.value = '';
+    this.elem.focus();
+
+    this.updateList();
   }
 
-  update() {
+
+  updateList() {
     this.listElems = this.listParent.querySelectorAll('li');
     this.listElems.forEach(item => {
       item.classList.remove('hidden');
-      item.innerHTML = item.innerText;
+      item.innerHTML = item.textContent;
     });
   }
 }

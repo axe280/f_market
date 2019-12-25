@@ -1,10 +1,18 @@
+import Field from './field.js';
+import Item from './item.js';
+import Notice from './notice.js';
+import RemoveButton from './removeButton.js';
+
+
 const app = () => {
+
   const buttonSend = document.querySelector('.send-button');
   const listParent = document.querySelector('.prod-list');
+  const removeLink = document.querySelector('.remove-link');
 
-  let field;
-
+  // [ {}, {} ...]
   let jsonDataList = [];
+
 
   // get json from server
   fetch('http://localhost:3000/db/list.json')
@@ -12,11 +20,17 @@ const app = () => {
     .then(data => {
       jsonDataList = data;
       render();
+    })
+    .catch(error => {
+      document.querySelector('.prod-list').after('Error text');
     });
 
+
   function render() {
+    // create and add list items
     jsonDataList.forEach(element => {
       let item = new Item(element.title, element.classNames);
+
       if (item.elem.classList.contains('disabled')) {
         listParent.append(item.elem);  
       } else {
@@ -25,19 +39,19 @@ const app = () => {
     });
 
 
-    field = new Field({
-      elem: document.querySelector('.js-field'),
-      listParent: listParent,
-      listElems: listParent.querySelectorAll('.prod-list li')
-    });
+    // create field
+    const field = new Field();
 
 
+    // scroll for ios safari
     document.addEventListener('scroll', event => {
       field.elem.blur();
     });
 
 
+    // save list on server
     buttonSend.addEventListener('click', function(event) {
+      // create json data
       let list = [];
 
       field.listElems.forEach(item => {
@@ -50,7 +64,8 @@ const app = () => {
 
       jsonDataList = list;
 
-      // send data list
+
+      // send json data list
       fetch('http://localhost:3000/', {
         method: 'POST',
         headers: {
@@ -60,10 +75,29 @@ const app = () => {
       })
       .then(response => {
         if (response.status === 200) {
-          console.log('Ok');
+          const notice = new Notice('success');
+          setTimeout(() => {
+            notice.remove();
+          }, 3000);
         }
+      })
+      .catch(error => {
+        document.querySelector('.prod-list').after('Error text');
       });
+
     });
+
+
+    // remove items
+    removeLink.addEventListener('click', removeClick);
+
+    function removeClick(event) {
+      field.listElems.forEach(item => {
+        const removeButton = new RemoveButton();
+        item.prepend(removeButton.elem);
+      });
+    }
+
   }
 
 }
