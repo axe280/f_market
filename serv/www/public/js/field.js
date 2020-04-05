@@ -81,7 +81,10 @@ export default class Field {
 
 
   updateList() {
+    this.listParent.classList.remove('edit-list-active');
+
     this.listElems = this.listParent.querySelectorAll('li');
+
     this.listElems.forEach(item => {
       item.classList.remove('hidden');
       item.innerHTML = item.textContent;

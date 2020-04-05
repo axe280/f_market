@@ -5,3 +5,11 @@ function insertMark(str, pos, len) {
 function randomArrElement(arr) {
   return arr[ Math.floor(Math.random() * (arr.length)) ];
 }
+
+function addBodyClass() {
+  document.querySelector('body').classList.add('shadow');
+}
+
+function removeBodyClass() {
+  document.querySelector('body').classList.remove('shadow');
+}

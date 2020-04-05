@@ -19,7 +19,7 @@ app.get('/db/list.json', (req, res) => {
 
 app.post('/', (req, res) => {
   fs.writeFileSync('db/list.json', JSON.stringify(req.body));
-  res.send();
+  res.send('success');
 });
 
 app.use((req, res) => {

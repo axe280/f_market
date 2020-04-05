@@ -1,5 +1,7 @@
 export default class RemoveButton {
-  constructor() {
+  constructor(listItem) {
+    this.listItem = listItem;
+
     this.elem = document.createElement('button');
     this.elem.className = 'delete-item';
     this.elem.setAttribute('type', 'button');
@@ -8,6 +10,7 @@ export default class RemoveButton {
   }
 
   remove(event) {
-    this.elem.parentElement.remove();
+    event.stopPropagation();
+    this.listItem.remove();
   }
 }

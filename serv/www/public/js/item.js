@@ -8,6 +8,10 @@ export default class Item {
   }
 
   selected(event) {
+    if (event.target.closest('.edit-field-wrapper')) {
+      return;
+    }
+
     if (this.elem.classList.contains('disabled')) {
       this.elem.classList.remove('disabled');
       this.moveUp();

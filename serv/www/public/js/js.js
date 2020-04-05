@@ -2,6 +2,7 @@ import Field from './field.js';
 import Item from './item.js';
 import Notice from './notice.js';
 import RemoveButton from './removeButton.js';
+import EditButton from './editButton.js';
 
 
 const app = () => {
@@ -15,14 +16,17 @@ const app = () => {
 
 
   // get json from server
-  fetch('http://localhost:3000/db/list.json')
+  // fetch('http://localhost:3000/db/list.json')
+  fetch('http://axedevelop.com.ua/db/list.json')
     .then(response => response.json())
     .then(data => {
-      jsonDataList = data;
+      if (Array.isArray(data)) {
+        jsonDataList = data;
+      }
       render();
     })
     .catch(error => {
-      document.querySelector('.prod-list').after('Error text');
+      document.querySelector('.prod-list').append('Error download data');
     });
 
 
@@ -43,14 +47,13 @@ const app = () => {
     const field = new Field();
 
 
-    // scroll for ios safari
-    document.addEventListener('scroll', event => {
-      field.elem.blur();
-    });
-
-
     // save list on server
     buttonSend.addEventListener('click', function(event) {
+      document.body.classList.add('body_sendscreen');
+      const notice = new Notice('success');
+      
+      field.updateList();
+
       // create json data
       let list = [];
 
@@ -66,34 +69,51 @@ const app = () => {
 
 
       // send json data list
-      fetch('http://localhost:3000/', {
+      // fetch('http://localhost:3000/', {
+      fetch('http://axedevelop.com.ua/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(jsonDataList)
       })
-      .then(response => {
-        if (response.status === 200) {
-          const notice = new Notice('success');
+        .then(response => {
+          if (response.status === 200) {
+            return response.text(); 
+          }
+        })
+        .then(() => {
+          setTimeout(() => {
+            document.body.classList.remove('body_sendscreen');
+          }, 1500);
+
           setTimeout(() => {
             notice.remove();
           }, 3000);
-        }
-      })
-      .catch(error => {
-        document.querySelector('.prod-list').after('Error text');
-      });
+        })
+        .catch(error => {
+          console.log(error);
+          document.querySelector('.prod-list').after('Error text');
+        });
 
     });
 
 
     // remove items
-    removeLink.addEventListener('click', removeClick);
+    removeLink.addEventListener('click', editList);
 
-    function removeClick(event) {
+    function editList(event) {
+      if (field.listParent.classList.contains('edit-list-active')) {
+        return;
+      } else {
+        field.listParent.classList.add('edit-list-active');
+      }
+
       field.listElems.forEach(item => {
-        const removeButton = new RemoveButton();
+        const removeButton = new RemoveButton(item);
+        const editButton = new EditButton(item);
+
+        item.prepend(editButton.elem);
         item.prepend(removeButton.elem);
       });
     }
